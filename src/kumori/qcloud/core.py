@@ -1,28 +1,47 @@
-import functools
 import time
 import requests
 from contextlib import contextmanager
-from typing import Dict
 
 from kumori.qcloud import sig_v1, errors
 
 
 class Console:
+    """
+    """
     enabled_errors = True
 
     def __init__(self, domain="tencentcloudapi.com"):
         self.domain = domain
         self.services = {}
 
-    def add_service(self, name, version):
-        s = self.services[name] = Service(name, version, name + "." + self.domain)
+    def add_service(self, name: str, version: str):
+        key = name
+        name = name.strip('_')
+        s = self.services[key] = Service(name, version, name + "." + self.domain)
         return s
 
     def get_service(self, name):
+        """_summary_
+
+        Args:
+            name (_str_): 
+
+        Raises:
+            errors.ConfigError
+
+        Returns:
+            _type_: _Service_
+        """
+        if name not in self.services:
+            raise errors.ConfigError(f'"{name}" is not recognized as any known service. You may call console.add_service(name) to create it.')
         return self.services[name]
 
     @contextmanager
     def suppress_errors(self):
+        """_summary_
+        
+        Errors of API response under this context won't raise _ApiError_
+        """
         self.enabled_errors = False
         try:
             yield
@@ -53,7 +72,18 @@ class Service:
         else:
             return f"{self.scheme}://{self.domain}/"
 
-    def add_api(self, name, version=None, method="POST"):
+    def add_api(self, name: str, version: str=None, method: str="POST"):
+        """
+        By default, an API automatically created by _get_api_ uses POST and has the same version as the one defined by the service. Use this method to create API that using a different method or version.
+
+        Args:
+            name (str): _action_
+            version (str, optional): Defaults to None.
+            method (str, optional): Defaults to "POST".
+
+        Returns:
+            _type_: _Api_
+        """
         api = self.actions[name] = Api(name, version or self.version, method.upper())
         return api
 
@@ -65,8 +95,6 @@ class Service:
 
 
 console = Console()
-console.add_service("cvm", "2017-03-12")
-
 
 class User:
     def __init__(self, sid: str, skey: str, region: str, console=console, uin=None):
@@ -137,3 +165,12 @@ class UserContext:
 
     def __getattr__(self, name):
         return self.get_action(name)
+
+
+console.add_service("cvm", "2017-03-12")
+console.add_service("vpc", "2017-03-12")
+console.add_service("cbs", "2017-03-12")
+console.add_service("tke", "2018-05-25")
+console.add_service("clb", "2018-03-17")
+console.add_service("as_", "2018-04-19")
+console.add_service('apigateway', '2018-08-08')

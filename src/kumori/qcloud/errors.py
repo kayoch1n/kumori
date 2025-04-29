@@ -3,3 +3,6 @@ class ApiError(Exception):
         super().__init__(message)
 
         self.errors = errors
+
+class ConfigError(Exception):
+    pass
