@@ -37,7 +37,7 @@ user.cvm.DescribeInstances(Unknown="Key")
 
 ## Advanced
 
-kumori 内置了 [cvm 在内的若干个产品的调用](./src/kumori/qcloud/core.py#L142)。如果你想要调用的产品在这里没出现，可以手动添加：
+kumori 内置了 [cvm 在内的若干个产品的调用](./src/kumori/qcloud/core.py#L172)。如果你想要调用的产品在这里没出现，可以手动添加：
 
 ```python
 from kumori.qcloud import console, User
