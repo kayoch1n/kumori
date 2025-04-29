@@ -1,0 +1,24 @@
+[build-system]
+requires = ["setuptools >= 77.0.3"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "kumori"
+version = "0.0.3"
+authors = [
+  { name="kayoch1n", email="hanayolawk@gmail.com" },
+]
+description = "Calling Tencent Cloud API in a easier way"
+readme = "README.md"
+classifiers = [
+    "Programming Language :: Python :: 3",
+]
+license = "GPL-3.0-only"
+license-files = ["LICEN[CS]E*"]
+dependencies = [
+    "requests",
+]
+
+[project.urls]
+Homepage = "https://github.com/kayoch1n/kumori"
+Issues = "https://github.com/kayoch1n/kumori/issues"
